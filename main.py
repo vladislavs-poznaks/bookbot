@@ -1,31 +1,32 @@
-def main():
-    path = "books/frankenstein.txt"
-    text = get_book(path)
+from stats import get_word_count, get_character_counts
+import sys
 
-    print("--- Begin report of books/frankenstein.txt ---")
-    print(f"{get_word_count(text)} words found in the document.")
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1)
+
+    path = sys.argv[1]
+    text = get_book_text(path)
+
+
+    print("============ BOOKBOT ============")
+    print(f"Analyzing book found at {path}...")
+    print("----------- Word Count ----------")
+    print(f"Found {get_word_count(text)} total words")
+    print("--------- Character Count -------")
 
     character_counts = get_character_counts(text)
 
-    for character in character_counts:
-        print(f"The character {character} was found {character_counts[character]} times")
+    for count in character_counts:
+        print(f"{count["char"]}: {count["count"]}")
 
-    print("--- End report ---")
+    print("============= END ===============")
 
-
-
-def get_book(path):
+def get_book_text(path):
     with open(path) as f:
         contents = f.read()
     
     return contents
-
-def get_word_count(text):
-    return len(text.split())
-
-def get_character_counts(text):
-    lowered = ''.join(char.lower() for char in text if char.isalpha())
-    
-    return {char: lowered.count(char) for char in set(lowered)}
 
 main()
